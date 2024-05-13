@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}   
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-1">
+        <div class="col-lg-2">
+            <!-- PLUG -->
+        </div>
+        <div class="col-lg-10">
+            <div class="row">
+                {% include "includes/filter.html" %}
+
+                {% for book in page_obj %}
+                    {% include "includes/card_book.html" %}
+                {% endfor %}
+            </div>
+            {% include "includes/pagination.html" %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,39 @@
+volumes:
+  pg_data:
+  static_content:
+  media_content:
+
+services:
+  backend:
+    build:
+      context: ./site/
+    env_file: 
+      - .env
+    volumes:
+      - ./site:/home/project/
+      - static_content:/var/www/site/static
+      - media_content:/var/www/site/media
+    command: >
+      sh -c "python3 manage.py collectstatic --noinput &&
+             gunicorn -b 0:8000 base.wsgi"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  
+  nginx:
+    build:
+      context: ./nginx/
+    ports:
+      - 80:80
+    volumes:
+      - static_content:/var/www/static/
+      - media_content:/var/www/media/
+
+
+
